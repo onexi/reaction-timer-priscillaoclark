@@ -27,7 +27,7 @@ function startTest() {
     }
     
     message.textContent = '';
-    target.style.backgroundColor = '#dc3545'; // Bootstrap 'danger' color
+    target.style.backgroundColor = '#dc3545';
     target.style.color = 'white';
     target.textContent = 'Wait for green...';
     isWaiting = true;
@@ -35,7 +35,7 @@ function startTest() {
     
     const delay = Math.floor(Math.random() * 4000) + 1000; // Random delay between 1-5 seconds
     setTimeout(() => {
-        target.style.backgroundColor = '#198754'; // Bootstrap 'success' color
+        target.style.backgroundColor = '#198754';
         target.style.color = 'white';
         target.textContent = 'Click now!';
         startTime = new Date().getTime();
@@ -49,7 +49,7 @@ function endTest() {
     const reactionTime = endTime - startTime;
     isWaiting = false;
     
-    target.style.backgroundColor = '#0d6efd'; // Bootstrap 'primary' color
+    target.style.backgroundColor = '#0d6efd';
     target.style.color = 'white';
     target.textContent = `Your time: ${reactionTime}ms`;
     message.textContent = 'Click "Start Test" to try again.';
@@ -165,4 +165,4 @@ function updateChart(data) {
     }
 }
 
-updateResults(); // Initial load of results
+updateResults();
