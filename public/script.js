@@ -1,5 +1,8 @@
+// public/script.js
 let startTime, endTime;
 let isWaiting = false;
+let canClick = false;
+let timerTimeout;
 const target = document.getElementById('target');
 const nameInput = document.getElementById('name');
 const results = document.getElementById('results');
@@ -14,8 +17,16 @@ target.addEventListener('click', handleTargetClick);
 exportBtn.addEventListener('click', exportToCSV);
 
 function handleTargetClick() {
-    if (isWaiting) {
+    if (!isWaiting) return; // Ignore clicks when not in a test
+
+    if (canClick) {
         endTest();
+    } else {
+        // Clicked too early
+        clearTimeout(timerTimeout);
+        message.textContent = 'Clicked too soon! Try again.';
+        message.className = 'mt-3 text-center text-danger';
+        resetTest();
     }
 }
 
@@ -27,36 +38,43 @@ function startTest() {
     }
     
     message.textContent = '';
-    target.style.backgroundColor = '#dc3545';
+    target.style.backgroundColor = '#dc3545'; // Bootstrap 'danger' color
     target.style.color = 'white';
     target.textContent = 'Wait for green...';
     isWaiting = true;
+    canClick = false;
     startBtn.disabled = true;
     
     const delay = Math.floor(Math.random() * 4000) + 1000; // Random delay between 1-5 seconds
-    setTimeout(() => {
-        target.style.backgroundColor = '#198754';
+    timerTimeout = setTimeout(() => {
+        target.style.backgroundColor = '#198754'; // Bootstrap 'success' color
         target.style.color = 'white';
         target.textContent = 'Click now!';
         startTime = new Date().getTime();
+        canClick = true;
     }, delay);
 }
 
 function endTest() {
-    if (!startTime) return; // Clicked too early
-    
     endTime = new Date().getTime();
     const reactionTime = endTime - startTime;
-    isWaiting = false;
+    resetTest();
     
-    target.style.backgroundColor = '#0d6efd';
+    target.style.backgroundColor = '#0d6efd'; // Bootstrap 'primary' color
     target.style.color = 'white';
     target.textContent = `Your time: ${reactionTime}ms`;
     message.textContent = 'Click "Start Test" to try again.';
     message.className = 'mt-3 text-center text-success';
-    startBtn.disabled = false;
     
     saveResult(nameInput.value, reactionTime);
+}
+
+function resetTest() {
+    isWaiting = false;
+    canClick = false;
+    startTime = null;
+    clearTimeout(timerTimeout);
+    startBtn.disabled = false;
 }
 
 function saveResult(name, time) {
@@ -165,4 +183,4 @@ function updateChart(data) {
     }
 }
 
-updateResults();
+updateResults(); // Initial load of results
