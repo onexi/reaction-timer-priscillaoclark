@@ -41,3 +41,6 @@ If you click the button before it turns green, the game will detect this as an e
 6. Open a web browser and go to `http://localhost:3030` to use the application.
 
 Enjoy testing and improving your reaction time!
+
+## Screenshot
+![image](img/demo2.png)
